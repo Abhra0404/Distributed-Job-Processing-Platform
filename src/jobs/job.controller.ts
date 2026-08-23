@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 
 import { createJobSchema } from "./job.schemas.js";
-import { createJob, getJobById } from "./job.service.js";
+import { cancelJob, createJob, getJobById, listJobs } from "./job.service.js";
 
 export async function submitJob(
   req: Request,
@@ -60,6 +60,79 @@ export async function getJob(
 
     return res.status(500).json({
       error: "Failed to retrieve job",
+    });
+  }
+}
+
+export async function getJobs(
+  req: Request,
+  res: Response,
+) {
+  const page = Number(req.query.page ?? 1);
+  const limit = Number(req.query.limit ?? 20);
+
+  if (
+    !Number.isInteger(page) ||
+    !Number.isInteger(limit) ||
+    page < 1 ||
+    limit < 1 ||
+    limit > 100
+  ) {
+    return res.status(400).json({
+      error: "Invalid pagination parameters",
+    });
+  }
+
+  try {
+    const jobs = await listJobs(page, limit);
+
+    return res.status(200).json({
+      page,
+      limit,
+      jobs,
+    });
+  } catch (error) {
+    console.error("Failed to list jobs:", error);
+
+    return res.status(500).json({
+      error: "Failed to list jobs",
+    });
+  }
+}
+
+export async function cancelJobController(
+  req: Request,
+  res: Response,
+) {
+  const jobId = req.params.id;
+
+  if (typeof jobId !== "string") {
+    return res.status(400).json({
+      error: "Invalid job ID",
+    });
+  }
+
+  try {
+    const result = await cancelJob(jobId);
+
+    if (result.status === "not_found") {
+      return res.status(404).json({
+        error: "Job not found",
+      });
+    }
+
+    if (result.status === "not_cancellable") {
+      return res.status(409).json({
+        error: `Job cannot be cancelled while ${result.job.status}`,
+      });
+    }
+
+    return res.status(200).json(result.job);
+  } catch (error) {
+    console.error("Failed to cancel job:", error);
+
+    return res.status(500).json({
+      error: "Failed to cancel job",
     });
   }
 }

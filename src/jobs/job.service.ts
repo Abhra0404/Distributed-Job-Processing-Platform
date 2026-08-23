@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 import { db } from "../db/index.js";
 import { jobs } from "../db/schema.js";
@@ -50,4 +50,55 @@ export async function getJobById(jobId: string) {
     .limit(1);
 
   return job ?? null;
+}
+
+export async function listJobs(
+  page: number,
+  limit: number,
+) {
+  const offset = (page - 1) * limit;
+
+  const result = await db
+    .select()
+    .from(jobs)
+    .orderBy(desc(jobs.createdAt))
+    .limit(limit)
+    .offset(offset);
+
+  return result;
+}
+
+export async function cancelJob(jobId: string) {
+  const [job] = await db
+    .select()
+    .from(jobs)
+    .where(eq(jobs.id, jobId))
+    .limit(1);
+
+  if (!job) {
+    return {
+      status: "not_found" as const,
+    };
+  }
+
+  if (job.status !== "queued") {
+    return {
+      status: "not_cancellable" as const,
+      job,
+    };
+  }
+
+  const [cancelledJob] = await db
+    .update(jobs)
+    .set({
+      status: "cancelled",
+      completedAt: new Date(),
+    })
+    .where(eq(jobs.id, jobId))
+    .returning();
+
+  return {
+    status: "cancelled" as const,
+    job: cancelledJob,
+  };
 }
