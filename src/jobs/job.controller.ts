@@ -38,7 +38,15 @@ export async function getJob(
   res: Response,
 ) {
   try {
-    const job = await getJobById(req.params.id);
+    const jobId = req.params.id;
+
+    if (typeof jobId !== "string") {
+        return res.status(400).json({
+            error: "Invalid job ID",
+        });
+    }
+
+    const job = await getJobById(jobId);
 
     if (!job) {
       return res.status(404).json({

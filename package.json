@@ -7,9 +7,10 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "worker": "tsx src/worker/worker.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
-  },
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Abhra0404/Distributed-Job-Processing-Platform.git"
