@@ -1,0 +1,43 @@
+{
+  "name": "distributed-job",
+  "version": "1.0.0",
+  "description": "A production-oriented distributed job processing platform built with **Node.js and Express.js** for submitting, scheduling, executing, monitoring, and managing asynchronous computational workloads across a scalable worker pool.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abhra0404/Distributed-Job-Processing-Platform.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Abhra0404/Distributed-Job-Processing-Platform/issues"
+  },
+  "homepage": "https://github.com/Abhra0404/Distributed-Job-Processing-Platform#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.2.0",
+    "@types/pg": "^8.23.1",
+    "@types/supertest": "^7.2.1",
+    "drizzle-kit": "^0.31.10",
+    "supertest": "^7.2.2",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
+    "express": "^5.2.1",
+    "ioredis": "^6.0.0",
+    "pg": "^8.23.0",
+    "redis": "^6.2.1",
+    "zod": "^4.4.3"
+  }
+}
