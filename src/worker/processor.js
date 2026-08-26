@@ -14,6 +14,15 @@ const sleepPayloadSchema = z.object({
   duration: z.number().nonnegative(),
 });
 
+const primePayloadSchema = z.object({
+  n: z.number().int().nonnegative(),
+});
+
+const matrixPayloadSchema = z.object({
+  a: z.array(z.array(z.number())),
+  b: z.array(z.array(z.number())),
+});
+
 function fibonacci(n) {
   if (n <= 1) {
     return n;
@@ -35,6 +44,57 @@ function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
+}
+
+function calculatePrime(n) {
+  if (n < 2) {
+    return false;
+  }
+
+  if (n === 2) {
+    return true;
+  }
+
+  if (n % 2 === 0) {
+    return false;
+  }
+
+  for (let i = 3; i * i <= n; i += 2) {
+    if (n % i === 0) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function multiplyMatrices(a, b) {
+  const rowsA = a.length;
+  const colsA = a[0].length;
+  const rowsB = b.length;
+  const colsB = b[0].length;
+
+  if (colsA !== rowsB) {
+    throw new Error(
+      "Matrix dimensions are incompatible",
+    );
+  }
+
+  const result = Array.from(
+    { length: rowsA },
+    () => Array(colsB).fill(0),
+  );
+
+  for (let i = 0; i < rowsA; i++) {
+    for (let j = 0; j < colsB; j++) {
+      for (let k = 0; k < colsA; k++) {
+        result[i][j] +=
+          a[i][k] * b[k][j];
+      }
+    }
+  }
+
+  return result;
 }
 
 export async function processJob(job) {
@@ -99,6 +159,43 @@ export async function processJob(job) {
 
         result = {
         sleptFor: payload.data.duration,
+        };
+
+        break;
+      }
+
+      case "prime": {
+        const payload = primePayloadSchema.safeParse(
+          existingJob.payload,
+        );
+
+        if (!payload.success) {
+          throw new Error("Invalid prime payload");
+        }
+
+        const n = payload.data.n;
+
+        result = {
+          n,
+          isPrime: calculatePrime(n),
+        };
+
+        break;
+      }
+
+      case "matrix": {
+        const payload = matrixPayloadSchema.safeParse(
+          existingJob.payload,
+        );
+
+        if (!payload.success) {
+          throw new Error("Invalid matrix payload");
+        }
+
+        const { a, b } = payload.data;
+
+        result = {
+          matrix: multiplyMatrices(a, b),
         };
 
         break;

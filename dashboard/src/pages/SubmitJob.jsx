@@ -6,16 +6,44 @@ import { api } from "../services/api";
 const JOB_CONFIG = {
   fibonacci: {
     label: "Fibonacci",
-    description: "Calculate the nth Fibonacci number.",
+    description:
+      "Calculate the nth Fibonacci number.",
     defaultPayload: {
       n: 40,
     },
   },
+
   sleep: {
     label: "Sleep",
-    description: "Run a simulated long-running job.",
+    description:
+      "Simulate a long-running computational job.",
     defaultPayload: {
       duration: 5000,
+    },
+  },
+
+  prime: {
+    label: "Prime Number",
+    description:
+      "Check whether a number is prime.",
+    defaultPayload: {
+      n: 9973,
+    },
+  },
+
+  matrix: {
+    label: "Matrix Multiplication",
+    description:
+      "Multiply two compatible matrices.",
+    defaultPayload: {
+      a: [
+        [1, 2],
+        [3, 4],
+      ],
+      b: [
+        [5, 6],
+        [7, 8],
+      ],
     },
   },
 };

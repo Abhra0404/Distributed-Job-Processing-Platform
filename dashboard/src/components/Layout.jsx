@@ -30,9 +30,6 @@ export default function Layout() {
         {/* Logo */}
         <div className="flex h-16 items-center border-b border-zinc-800/80 px-5">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-black">
-              <Activity className="h-4 w-4" />
-            </div>
 
             <div>
               <p className="text-sm font-semibold tracking-tight">

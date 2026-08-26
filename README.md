@@ -65,12 +65,14 @@ This separation allows the **API and worker layer to scale independently**.
 * Dockerized PostgreSQL and Redis
 * Type-safe database access with Drizzle ORM
 
-### Supported workloads
+### Supported Workloads
 
-* `fibonacci`
-* `sleep`
-* `fail`
-* `flaky`
+| Workload | Description |
+|---|---|
+| `fibonacci` | Calculate the nth Fibonacci number |
+| `sleep` | Simulate a long-running job |
+| `prime` | Check whether a number is prime |
+| `matrix` | Multiply two matrices |
 
 The executor layer is designed so additional workloads can be added without changing the API architecture.
 
