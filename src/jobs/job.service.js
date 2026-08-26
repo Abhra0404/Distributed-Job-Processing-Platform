@@ -5,14 +5,8 @@ import { desc, eq } from "drizzle-orm";
 import { db } from "../db/index.js";
 import { jobs } from "../db/schema.js";
 import { jobQueue } from "../queue/job.queue.js";
-import type { JobType } from "./job.types.js";
 
-interface CreateJobInput {
-  type: JobType;
-  payload: Record<string, unknown>;
-}
-
-export async function createJob(input: CreateJobInput) {
+export async function createJob(input) {
   const jobId = randomUUID();
 
   const [job] = await db
@@ -42,7 +36,7 @@ export async function createJob(input: CreateJobInput) {
   return job;
 }
 
-export async function getJobById(jobId: string) {
+export async function getJobById(jobId) {
   const [job] = await db
     .select()
     .from(jobs)
@@ -52,10 +46,7 @@ export async function getJobById(jobId: string) {
   return job ?? null;
 }
 
-export async function listJobs(
-  page: number,
-  limit: number,
-) {
+export async function listJobs(page, limit) {
   const offset = (page - 1) * limit;
 
   const result = await db
@@ -68,7 +59,7 @@ export async function listJobs(
   return result;
 }
 
-export async function cancelJob(jobId: string) {
+export async function cancelJob(jobId) {
   const [job] = await db
     .select()
     .from(jobs)
@@ -77,13 +68,13 @@ export async function cancelJob(jobId: string) {
 
   if (!job) {
     return {
-      status: "not_found" as const,
+      status: "not_found",
     };
   }
 
   if (job.status !== "queued") {
     return {
-      status: "not_cancellable" as const,
+      status: "not_cancellable",
       job,
     };
   }
@@ -98,7 +89,7 @@ export async function cancelJob(jobId: string) {
     .returning();
 
   return {
-    status: "cancelled" as const,
+    status: "cancelled",
     job: cancelledJob,
   };
 }

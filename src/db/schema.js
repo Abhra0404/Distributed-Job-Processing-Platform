@@ -1,9 +1,10 @@
 import {
+  integer,
+  jsonb,
   pgEnum,
   pgTable,
   text,
   timestamp,
-  jsonb,
 } from "drizzle-orm/pg-core";
 
 export const jobStatusEnum = pgEnum("job_status", [
@@ -24,11 +25,10 @@ export const jobs = pgTable("jobs", {
     .default("queued"),
 
   payload: jsonb("payload")
-    .$type<Record<string, unknown>>()
+    .$type()
     .notNull(),
 
-  result: jsonb("result")
-    .$type<Record<string, unknown> | null>(),
+  result: jsonb("result").$type(),
 
   error: text("error"),
 

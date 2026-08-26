@@ -1,14 +1,10 @@
 import { eq } from "drizzle-orm";
-import type { Job } from "bullmq";
 
 import { z } from "zod";
 
 import { db } from "../db/index.js";
 import { jobs } from "../db/schema.js";
 
-interface JobData {
-  jobId: string;
-}
 
 const fibonacciPayloadSchema = z.object({
   n: z.number().int().nonnegative(),
@@ -18,7 +14,7 @@ const sleepPayloadSchema = z.object({
   duration: z.number().nonnegative(),
 });
 
-function fibonacci(n: number): number {
+function fibonacci(n) {
   if (n <= 1) {
     return n;
   }
@@ -35,13 +31,13 @@ function fibonacci(n: number): number {
   return current;
 }
 
-function sleep(ms: number): Promise<void> {
+function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
 
-export async function processJob(job: Job<JobData>) {
+export async function processJob(job) {
   const { jobId } = job.data;
 
   console.log(`[worker] Processing job ${jobId}`);
@@ -71,7 +67,7 @@ export async function processJob(job: Job<JobData>) {
     .where(eq(jobs.id, jobId));
 
   try {
-    let result: Record<string, unknown>;
+    let result;
 
     switch (existingJob.type) {
       case "fibonacci": {

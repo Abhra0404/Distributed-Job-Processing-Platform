@@ -9,7 +9,7 @@ const server = app.listen(env.PORT, () => {
   );
 });
 
-async function shutdown(signal: string) {
+async function shutdown(signal) {
   console.log(`[server] Received ${signal}`);
 
   server.close(async () => {

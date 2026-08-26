@@ -1,12 +1,7 @@
-import type { Request, Response } from "express";
-
 import { createJobSchema } from "./job.schemas.js";
 import { cancelJob, createJob, getJobById, listJobs } from "./job.service.js";
 
-export async function submitJob(
-  req: Request,
-  res: Response,
-) {
+export async function submitJob(req, res) {
   const parsed = createJobSchema.safeParse(req.body);
 
   if (!parsed.success) {
@@ -33,10 +28,7 @@ export async function submitJob(
   }
 }
 
-export async function getJob(
-  req: Request,
-  res: Response,
-) {
+export async function getJob(req, res) {
   try {
     const jobId = req.params.id;
 
@@ -64,10 +56,7 @@ export async function getJob(
   }
 }
 
-export async function getJobs(
-  req: Request,
-  res: Response,
-) {
+export async function getJobs(req, res) {
   const page = Number(req.query.page ?? 1);
   const limit = Number(req.query.limit ?? 20);
 
@@ -100,10 +89,7 @@ export async function getJobs(
   }
 }
 
-export async function cancelJobController(
-  req: Request,
-  res: Response,
-) {
+export async function cancelJobController(req, res) {
   const jobId = req.params.id;
 
   if (typeof jobId !== "string") {

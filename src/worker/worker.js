@@ -54,7 +54,7 @@ worker.on("error", (error) => {
   );
 });
 
-async function shutdown(signal: string) {
+async function shutdown(signal) {
   console.log(
     `[worker:${workerId}] Received ${signal}`,
   );
