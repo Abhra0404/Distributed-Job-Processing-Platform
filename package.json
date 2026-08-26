@@ -33,6 +33,7 @@
   "homepage": "https://github.com/Abhra0404/Distributed-Job-Processing-Platform#readme",
   "dependencies": {
     "bullmq": "^6.2.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "express": "^5.2.1",
